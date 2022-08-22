@@ -6,3 +6,33 @@ import plotly as py
 import plotly.graph_objs as go
 
 data = pd.read_csv('online_shoppers_intention.csv')
+
+missing = data.isnull().sum()
+print(missing)
+
+x = data.iloc[:,[5,6]].values
+x.shape
+
+from sklearn.cluster import KMeans
+
+wcss=[]
+for i in range(1,11):
+    km = KMeans(n_clusters=i,
+               init = 'k-means++',
+               max_iter=300,
+               n_init=10,
+               random_state=0,
+               algorithm='full',
+               tol=0.001)
+    km.fit(x)
+    labels=km.labels_
+    wcss.append(km.inertia_)
+    
+plt.rcParams['figure.figsize']=(13,7)
+plt.plot(range(1,11),wcss)
+plt.grid()
+plt.tight_layout()
+plt.title('The Elbow Method', fontsize=20)
+plt.xlabel('No. of Clusters')
+plt.ylabel('xcss')
+plt.show()
