@@ -1,16 +1,14 @@
-# K Means Clustering
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+labels_true = le.fit_transform(data['Revenue'])
 
-km = KMeans(n_clusters = 2,init = 'k-means++',max_iter = 300, n_init = 10, random_state = 0)
+labels_pred = y_means
 
-y_means = km.fit_predict(x)
+from sklearn import metrics
+score = metrics.adjusted_rand_score(labels_true, labels_pred)
+print("Adjusted rand index: ")
+print(score)
 
-plt.scatter(x[y_means == 0,0], x[y_means == 0, 1], s = 50, c = 'yellow', label = 'Unintrested Customers')
-plt.scatter(x[y_means == 1,0], x[y_means == 1, 1], s = 50, c = 'pink', label = 'Target Customers')
-plt.scatter(km.cluster_centers_[:,0], km.cluster_centers_[:, 1], s = 50, c = 'blue', label = 'centeroid')
-
-plt.title('ProductRelated Duration vs Bounce Rate', fontsize = 20)
-plt.grid()
-plt.xlabel("ProductRelated Duration")
-plt.ylabel('Bounce Rates')
-plt.legend()
-plt.show()
+import scikitplot as skplt
+plt_1 = skplt.metrics.plot_confusion_matrix(labels_true, labels_pred, normalize=False)
+plt_2 = skplt.metrics.plot_confusion_matrix(labels_true, labels_pred, normalize=True)
